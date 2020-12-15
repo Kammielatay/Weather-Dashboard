@@ -1,0 +1,24 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    padding: 20px;
+    height: 100px;
+}
+
+.col-4 {
+    background-color: #eee;
+    border: 2px solid black;
+    height: 60vh;
+}
+
+.col-8 {
+    border: 1px solid pink;
+}
+
+.row2 {
+    border: 2px solid magenta;
+    height: 50%;
+}
