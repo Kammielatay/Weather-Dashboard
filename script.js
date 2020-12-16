@@ -8,6 +8,8 @@ $("#searchButton").on('click', function(event){
 
     let queryURL = "https://cors-anywhere.herokuapp.com/https://api.openweathermap.org/data/2.5/forecast?q=" + $('.userInput').val() + "&appid=984c41e22d016a17febb9302c3224c83";
 
+    
+
     $.ajax({
         url: queryURL,
         method: "GET"
@@ -30,11 +32,14 @@ $("#searchButton").on('click', function(event){
     })
 
     if (localStorage.getItem('myCities') !== null) {
-        console.log(citySearch)
+        
         citySearch.push($('.userInput').val());
         localStorage.setItem('myCities', JSON.stringify(citySearch));
+       
     }
-    getItems()
+       
+    getItems()  
+    
 }) 
  
 function getItems(){
@@ -51,7 +56,7 @@ function getItems(){
     }
 }
 
-getItems()
+//getItems()
 
 
 
