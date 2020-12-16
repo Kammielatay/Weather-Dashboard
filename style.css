@@ -20,5 +20,6 @@
 
 .row2 {
     border: 2px solid magenta;
+    padding-top:20px;
     height: 50%;
 }

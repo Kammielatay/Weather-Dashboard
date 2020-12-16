@@ -1,4 +1,5 @@
 
+let currentDay = moment().format('L');  
 
 $("#searchButton").on('click', function(event){
     event.preventDefault();
@@ -12,16 +13,20 @@ $("#searchButton").on('click', function(event){
         console.log(response);
 
         let cityName = response.city.name;
-        console.log(cityName);
-        
+        $("#cityDisplay").text(cityName + " " + "(" + currentDay + ")");
+    
         let currTemp = response.list[0].main.temp; 
-        console.log(currTemp);
-
-        let windSpeed = response.list[0].wind.speed;
-        console.log(windSpeed)
+        let convertedTemp = ((currTemp - 273.15) * (9 / 5) + 32).toFixed(1);
+        $("#temperatureDisplay").text("Temperature: " + convertedTemp + " \u00B0F")
 
         let currentHumidity = response.list[0].main.humidity;
-        console.log(currentHumidity)
+        $("#humidityDisplay").text("Humidity: " + currentHumidity + "%")
+
+        let windSpeed = (response.list[0].wind.speed).toFixed(1);
+        $("#windSpeedDisplay").text("Wind Speed: " + windSpeed + " MPH")
+
+        
+       
 
 
 })
