@@ -34,15 +34,15 @@ function call() {
         }).then(function (response) {
             console.log(response);
 
-            let index = response.value
-            console.log(index)
-
-            if(index < 2.9){
-                $('#uvIndexDisplay').text("UV Index: ").append("<span class='favorable'>" + index + '</span');
-            } else if (index > 3.0 && index < 7.9) {
-                $('#uvIndexDisplay').text("UV Index: ").append("<span class='moderate'>" + index + '</span');
-            } else if (index > 8.0){
-                $('#uvIndexDisplay').text("UV Index: ").append("<span class='severe'>" + index + '</span');
+            let uvIndex = response.value
+            console.log()
+            
+            if(uvIndex < 2.9){
+                $('#uvIndexDisplay').text("UV Index: ").append("<span class='favorable'>" + uvIndex + '</span');
+            } else if (uvIndex > 3.0 && uvIndex < 7.9) {
+                $('#uvIndexDisplay').text("UV Index: ").append("<span class='moderate'>" + uvIndex + '</span');
+            } else if (uvIindex > 8.0){
+                $('#uvIndexDisplay').text("UV Index: ").append("<span class='severe'>" + uvIndex + '</span');
             }
 
 
@@ -87,8 +87,14 @@ $("#searchButton").on('click', function(event){
         citySearch.push(value);
         localStorage.setItem('myCities', JSON.stringify(citySearch));
     }
-
     
 }) 
- 
 
+$('#new-search').on('click', function(){
+    location.reload();
+})
+
+$('#clear-history').on('click', function(){
+    localStorage.clear();
+    location.reload();
+})
