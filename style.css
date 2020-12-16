@@ -10,16 +10,15 @@
 
 .col-4 {
     background-color: #eee;
-    border: 2px solid black;
-    height: 60vh;
+    border: 2px solid darkgray;
+    height: auto;
 }
 
-.col-8 {
-    border: 1px solid pink;
-}
 
-.row2 {
-    border: 2px solid magenta;
-    padding-top:20px;
-    height: 50%;
+.search-div{
+    background-color: white;
+    padding: 10px;
+    width: 100%;
+    height: 50px;
+    border: 1px solid #eee;
 }
