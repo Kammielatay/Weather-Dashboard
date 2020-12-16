@@ -2,10 +2,11 @@
 let currentDay = moment().format('L'); 
 let citySearch = [];
 
+
 $("#searchButton").on('click', function(event){
     event.preventDefault();
 
-    let queryURL = "http://api.openweathermap.org/data/2.5/forecast?q=" + $('.userInput').val() + "&appid=984c41e22d016a17febb9302c3224c83";
+    let queryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + $('.userInput').val() + "&appid=984c41e22d016a17febb9302c3224c83";
 
     $.ajax({
         url: queryURL,
@@ -29,6 +30,7 @@ $("#searchButton").on('click', function(event){
     })
 
     if (localStorage.getItem('myCities') !== null) {
+        console.log(citySearch)
         citySearch.push($('.userInput').val());
         localStorage.setItem('myCities', JSON.stringify(citySearch));
     }
