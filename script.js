@@ -6,7 +6,7 @@ let citySearch = [];
 $("#searchButton").on('click', function(event){
     event.preventDefault();
 
-    let queryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + $('.userInput').val() + "&appid=984c41e22d016a17febb9302c3224c83";
+    let queryURL = "https://cors-anywhere.herokuapp.com/https://api.openweathermap.org/data/2.5/forecast?q=" + $('.userInput').val() + "&appid=984c41e22d016a17febb9302c3224c83";
 
     $.ajax({
         url: queryURL,
