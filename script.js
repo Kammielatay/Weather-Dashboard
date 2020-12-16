@@ -1,40 +1,40 @@
 
+// getting current date
 let currentDay = moment().format('L'); 
 let citySearch = [];
 
 function call() {
-    let queryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + $('.userInput').val() + "&appid=984c41e22d016a17febb9302c3224c83";
+    let queryURL = "https://cors-anywhere.herokuapp.com/api.openweathermap.org/data/2.5/weather?q=" + $('.userInput').val() + "&appid=984c41e22d016a17febb9302c3224c83";
 
-    
 
-    //https://cors-anywhere.herokuapp.com/
-
+   
+    // ajax call to get current weather conditions
     $.ajax({
         url: queryURL,
         method: "GET"
     }).then(function (response) {
         console.log(response);
-        let convertedTemp = ((response.list[0].main.temp - 273.15) * (9 / 5) + 32).toFixed(1);
-        let windSpeed = (response.list[0].wind.speed).toFixed(1);
+        let convertedTemp = ((response.main.temp - 273.15) * (9 / 5) + 32).toFixed(1);
+        let windSpeed = (response.wind.speed).toFixed(1);
 
-        $("#cityDisplay").text(response.city.name + " " + "(" + currentDay + ")");
+        $("#cityDisplay").text(response.name + " " + "(" + currentDay + ")");
         
         $("#temperatureDisplay").text("Temperature: " + convertedTemp + " \u00B0F");
 
-        $("#humidityDisplay").text("Humidity: " + response.list[0].main.humidity + "%");
+        $("#humidityDisplay").text("Humidity: " + response.main.humidity + "%");
 
         $("#windSpeedDisplay").text("Wind Speed: " + windSpeed + " MPH");
 
-
-         let uvQueryURL = "http://api.openweathermap.org/data/2.5/uvi?lat=" + response.city.coord.lat + "&lon=" + response.city.coord.lon + "&appid=984c41e22d016a17febb9302c3224c83"
+        // ajax one call for UV Index
+        let oneCallQueryURL = "https://cors-anywhere.herokuapp.com/api.openweathermap.org/data/2.5/onecall?lat=" + response.coord.lat + "&lon=" + response.coord.lon + "&appid=984c41e22d016a17febb9302c3224c83"
 
         $.ajax({
-            url: uvQueryURL,
+            url: oneCallQueryURL,
             method: "GET"
         }).then(function (response) {
             console.log(response);
-
-            let uvIndex = response.value
+            // getting and setting the UV index
+            let uvIndex = response.current.uvi
             console.log()
             
             if(uvIndex < 2.9){
@@ -45,10 +45,41 @@ function call() {
                 $('#uvIndexDisplay').text("UV Index: ").append("<span class='severe'>" + uvIndex + '</span');
             }
 
+            //setting the 5-day forecast
+
+            $('#forecast-header').text("5-Day Forecast:");
+
+            let days = ['day-1', 'day-2', 'day-3', 'day-4', 'day-5']
+
+            for (let i = 1; i < days.length +1 ; i++) {
+                
+                let cardDiv = $('<div class="card col">')
+                let dayHeader = $('<p class="next-day">')
+                let dayTemp = $('<p class="temp">')
+                let dayHumidity = $('<p class="humid">')
+
+                let tempConvert = ((response.daily[i].temp.day - 273.15) * (9 / 5) + 32).toFixed(1)
+                let timestamp = response.daily[i].dt * 1000
+                
+                const d = new Date(timestamp);
+                date = d.toDateString();
+                console.log(date);
+        
+
+                dayHeader.text(date)
+                dayTemp.text("Temp: " + tempConvert + " \u00B0F")
+                dayHumidity.text("Humidity: " + response.daily[i].humidity + "%")
+
+                $('.forecast-display').append(cardDiv)
+                cardDiv.append(dayHeader)
+                cardDiv.append(dayTemp)
+                cardDiv.append(dayHumidity)
+
+
+            }
 
     })
-
-
+    
     })
 }
 
@@ -63,8 +94,8 @@ function getItems() {
             $("#searchHistory").append(displayDiv)
 
         }
+      
     }
-
 }
 
 getItems()
