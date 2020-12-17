@@ -4,7 +4,7 @@
 }
 
 .header {
-    background-color: #90e0ef;
+    background-color: #a8dadc;
     padding: 20px;
     height: 100px;
 }
@@ -55,6 +55,6 @@
 
 }
 
-.next-day{
-    
+.icon {
+    width: 60px;
 }

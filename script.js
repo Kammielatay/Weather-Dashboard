@@ -4,9 +4,7 @@ let currentDay = moment().format('L');
 let citySearch = [];
 
 function call() {
-    let queryURL = "https://cors-anywhere.herokuapp.com/api.openweathermap.org/data/2.5/weather?q=" + $('.userInput').val() + "&appid=984c41e22d016a17febb9302c3224c83";
-
-
+    let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + $('.userInput').val() + "&appid=984c41e22d016a17febb9302c3224c83";
    
     // ajax call to get current weather conditions
     $.ajax({
@@ -17,7 +15,11 @@ function call() {
         let convertedTemp = ((response.main.temp - 273.15) * (9 / 5) + 32).toFixed(1);
         let windSpeed = (response.wind.speed).toFixed(1);
 
-        $("#cityDisplay").text(response.name + " " + "(" + currentDay + ")");
+        let weatherIcon = $('<img class="icon">');
+        weatherIcon.attr("src", "http://openweathermap.org/img/wn/" + response.weather[0].icon + ".png")
+
+
+        $("#cityDisplay").text(response.name + " " + "(" + currentDay + ")").append(weatherIcon);
         
         $("#temperatureDisplay").text("Temperature: " + convertedTemp + " \u00B0F");
 
@@ -26,7 +28,7 @@ function call() {
         $("#windSpeedDisplay").text("Wind Speed: " + windSpeed + " MPH");
 
         // ajax one call for UV Index
-        let oneCallQueryURL = "https://cors-anywhere.herokuapp.com/api.openweathermap.org/data/2.5/onecall?lat=" + response.coord.lat + "&lon=" + response.coord.lon + "&appid=984c41e22d016a17febb9302c3224c83"
+        let oneCallQueryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + response.coord.lat + "&lon=" + response.coord.lon + "&appid=984c41e22d016a17febb9302c3224c83"
 
         $.ajax({
             url: oneCallQueryURL,
@@ -54,7 +56,9 @@ function call() {
             for (let i = 1; i < days.length +1 ; i++) {
                 
                 let cardDiv = $('<div class="card col">')
+
                 let dayHeader = $('<p class="next-day">')
+                let dayIcon = $('<img class="icon">')
                 let dayTemp = $('<p class="temp">')
                 let dayHumidity = $('<p class="humid">')
 
@@ -63,18 +67,16 @@ function call() {
                 
                 const d = new Date(timestamp);
                 date = d.toDateString();
-                console.log(date);
-        
 
+                
                 dayHeader.text(date)
+                dayIcon.attr("src", "http://openweathermap.org/img/wn/" + response.daily[i].weather[0].icon +".png")
                 dayTemp.text("Temp: " + tempConvert + " \u00B0F")
                 dayHumidity.text("Humidity: " + response.daily[i].humidity + "%")
 
-                $('.forecast-display').append(cardDiv)
-                cardDiv.append(dayHeader)
-                cardDiv.append(dayTemp)
-                cardDiv.append(dayHumidity)
 
+                $('.forecast-display').append(cardDiv)
+                cardDiv.append(dayHeader, dayIcon, dayTemp, dayHumidity)
 
             }
 
@@ -94,7 +96,7 @@ function getItems() {
             $("#searchHistory").append(displayDiv)
 
         }
-      
+
     }
 }
 
