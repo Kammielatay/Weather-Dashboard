@@ -31,7 +31,7 @@ function getWeather(cityName) {
         $("#windSpeedDisplay").text("Wind Speed: " + windSpeed + " MPH");
 
         // ajax one call for UV Index
-        let oneCallQueryURL = "http://api.openweathermap.org/data/2.5/onecall?lat=" + response.coord.lat + "&lon=" + response.coord.lon + "&appid=984c41e22d016a17febb9302c3224c83"
+        let oneCallQueryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + response.coord.lat + "&lon=" + response.coord.lon + "&appid=984c41e22d016a17febb9302c3224c83"
 
         $.ajax({
             url: oneCallQueryURL,
