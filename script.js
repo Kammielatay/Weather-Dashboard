@@ -2,9 +2,11 @@
 // getting current date
 let currentDay = moment().format('L'); 
 let citySearch = [];
+//+ $('.userInput').val() +
 
-function call() {
-    let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + $('.userInput').val() + "&appid=984c41e22d016a17febb9302c3224c83";
+
+function getWeather(cityName) {
+    let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=984c41e22d016a17febb9302c3224c83";
    
     // ajax call to get current weather conditions
     $.ajax({
@@ -16,7 +18,7 @@ function call() {
         let windSpeed = (response.wind.speed).toFixed(1);
 
         let weatherIcon = $('<img class="icon">');
-        weatherIcon.attr("src", "http://openweathermap.org/img/wn/" + response.weather[0].icon + ".png")
+        weatherIcon.attr("src", "https://openweathermap.org/img/wn/" + response.weather[0].icon + ".png")
 
 
         $("#cityDisplay").text(response.name + " " + "(" + currentDay + ")").append(weatherIcon);
@@ -28,17 +30,15 @@ function call() {
         $("#windSpeedDisplay").text("Wind Speed: " + windSpeed + " MPH");
 
         // ajax one call for UV Index
-        let oneCallQueryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + response.coord.lat + "&lon=" + response.coord.lon + "&appid=984c41e22d016a17febb9302c3224c83"
+        let oneCallQueryURL = "http://api.openweathermap.org/data/2.5/onecall?lat=" + response.coord.lat + "&lon=" + response.coord.lon + "&appid=984c41e22d016a17febb9302c3224c83"
 
         $.ajax({
             url: oneCallQueryURL,
             method: "GET"
         }).then(function (response) {
-            console.log(response);
             // getting and setting the UV index
             let uvIndex = response.current.uvi
-            console.log()
-            
+
             if(uvIndex < 2.9){
                 $('#uvIndexDisplay').text("UV Index: ").append("<span class='favorable'>" + uvIndex + '</span');
             } else if (uvIndex > 3.0 && uvIndex < 7.9) {
@@ -70,7 +70,7 @@ function call() {
 
                 
                 dayHeader.text(date)
-                dayIcon.attr("src", "http://openweathermap.org/img/wn/" + response.daily[i].weather[0].icon +".png")
+                dayIcon.attr("src", "https://openweathermap.org/img/wn/" + response.daily[i].weather[0].icon +".png")
                 dayTemp.text("Temp: " + tempConvert + " \u00B0F")
                 dayHumidity.text("Humidity: " + response.daily[i].humidity + "%")
 
@@ -88,36 +88,38 @@ function call() {
 function getItems() {
     if (localStorage.getItem('myCities') !== null) {
         let mySearch = JSON.parse(localStorage.getItem('myCities'));
+        
 
         for (let i = 0; i < mySearch.length; i++) {
-            let displayDiv = $('<div>');
-            displayDiv.addClass("search-div")
-            displayDiv.text(mySearch[i]);
+            let displayDiv = $('<button>');
+            displayDiv.addClass("search-btn");
+            displayDiv.text(mySearch[i])
+            displayDiv.attr('value', mySearch[i])
             $("#searchHistory").append(displayDiv)
-
+            
         }
-
+        
     }
 }
-
 getItems()
 
 
 $("#searchButton").on('click', function(event){
     event.preventDefault();
+    let cityName = $('.userInput').val()
     
-    call();
+    getWeather(cityName);
 
-    let value = $('.userInput').val()
+    //let value = $('.userInput').val()
 
     if (localStorage.getItem('myCities') !== null) {
         let existing = JSON.parse(localStorage.getItem('myCities'));
-        existing.push(value)
+        existing.push(cityName)
         localStorage.setItem('myCities', JSON.stringify(existing))
         
     } 
      else if (localStorage.getItem('myCities') === null){
-        citySearch.push(value);
+        citySearch.push(cityName);
         localStorage.setItem('myCities', JSON.stringify(citySearch));
     }
     
@@ -130,4 +132,14 @@ $('#new-search').on('click', function(){
 $('#clear-history').on('click', function(){
     localStorage.clear();
     location.reload();
+})
+
+
+$('.search-btn').on('click', function(){
+    
+    cityName = $(this).val()
+    getWeather(cityName)
+
+   $('.clear').html('')
+      
 })
