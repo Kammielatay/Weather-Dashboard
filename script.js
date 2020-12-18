@@ -7,6 +7,7 @@ let citySearch = [];
 
 function getWeather(cityName) {
     let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=984c41e22d016a17febb9302c3224c83";
+    $('.clear').html('')
    
     // ajax call to get current weather conditions
     $.ajax({
@@ -106,6 +107,7 @@ getItems()
 
 $("#searchButton").on('click', function(event){
     event.preventDefault();
+
     let cityName = $('.userInput').val()
     
     getWeather(cityName);
