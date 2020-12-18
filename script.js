@@ -2,7 +2,6 @@
 // getting current date
 let currentDay = moment().format('L'); 
 let citySearch = [];
-//+ $('.userInput').val() +
 
 
 function getWeather(cityName) {
@@ -14,7 +13,7 @@ function getWeather(cityName) {
         url: queryURL,
         method: "GET"
     }).then(function (response) {
-        console.log(response);
+        // getting and setting current weather display
         let convertedTemp = ((response.main.temp - 273.15) * (9 / 5) + 32).toFixed(1);
         let windSpeed = (response.wind.speed).toFixed(1);
 
@@ -56,36 +55,34 @@ function getWeather(cityName) {
 
             for (let i = 1; i < days.length +1 ; i++) {
                 
-                let cardDiv = $('<div class="card col">')
+                let cardDiv = $('<div class="card col">');
+                let dayHeader = $('<p class="next-day">');
+                let dayIcon = $('<img class="icon">');
+                let dayTemp = $('<p class="temp">');
+                let dayHumidity = $('<p class="humid">');
 
-                let dayHeader = $('<p class="next-day">')
-                let dayIcon = $('<img class="icon">')
-                let dayTemp = $('<p class="temp">')
-                let dayHumidity = $('<p class="humid">')
-
-                let tempConvert = ((response.daily[i].temp.day - 273.15) * (9 / 5) + 32).toFixed(1)
-                let timestamp = response.daily[i].dt * 1000
+                let tempConvert = ((response.daily[i].temp.day - 273.15) * (9 / 5) + 32).toFixed(1);
+                let timestamp = response.daily[i].dt * 1000;
                 
                 const d = new Date(timestamp);
                 date = d.toDateString();
 
                 
                 dayHeader.text(date)
-                dayIcon.attr("src", "https://openweathermap.org/img/wn/" + response.daily[i].weather[0].icon +".png")
-                dayTemp.text("Temp: " + tempConvert + " \u00B0F")
-                dayHumidity.text("Humidity: " + response.daily[i].humidity + "%")
+                dayIcon.attr("src", "https://openweathermap.org/img/wn/" + response.daily[i].weather[0].icon +".png");
+                dayTemp.text("Temp: " + tempConvert + " \u00B0F");
+                dayHumidity.text("Humidity: " + response.daily[i].humidity + "%");
 
 
-                $('.forecast-display').append(cardDiv)
-                cardDiv.append(dayHeader, dayIcon, dayTemp, dayHumidity)
+                $('.forecast-display').append(cardDiv);
+                cardDiv.append(dayHeader, dayIcon, dayTemp, dayHumidity);
 
             }
-
     })
     
     })
 }
-
+// getting items from the local storage to display as buttons on page
 function getItems() {
     if (localStorage.getItem('myCities') !== null) {
         let mySearch = JSON.parse(localStorage.getItem('myCities'));
@@ -94,17 +91,17 @@ function getItems() {
         for (let i = 0; i < mySearch.length; i++) {
             let displayDiv = $('<button>');
             displayDiv.addClass("search-btn");
-            displayDiv.text(mySearch[i])
-            displayDiv.attr('value', mySearch[i])
-            $("#searchHistory").append(displayDiv)
+            displayDiv.text(mySearch[i]);
+            displayDiv.attr('value', mySearch[i]);
+            $("#searchHistory").append(displayDiv);
             
         }
         
     }
 }
-getItems()
+getItems();
 
-
+// adding functionality to search button
 $("#searchButton").on('click', function(event){
     event.preventDefault();
 
@@ -112,12 +109,10 @@ $("#searchButton").on('click', function(event){
     
     getWeather(cityName);
 
-    //let value = $('.userInput').val()
-
     if (localStorage.getItem('myCities') !== null) {
         let existing = JSON.parse(localStorage.getItem('myCities'));
-        existing.push(cityName)
-        localStorage.setItem('myCities', JSON.stringify(existing))
+        existing.push(cityName);
+        localStorage.setItem('myCities', JSON.stringify(existing));
         
     } 
      else if (localStorage.getItem('myCities') === null){
@@ -127,21 +122,21 @@ $("#searchButton").on('click', function(event){
     
 }) 
 
+// starting a new search
 $('#new-search').on('click', function(){
     location.reload();
 })
 
+// clearing the history from local storage
 $('#clear-history').on('click', function(){
     localStorage.clear();
     location.reload();
 })
 
-
+// search history button click
 $('.search-btn').on('click', function(){
-    
-    cityName = $(this).val()
-    getWeather(cityName)
-
-   $('.clear').html('')
+    cityName = $(this).val();
+    getWeather(cityName);
+    $('.clear').html('');
       
 })
